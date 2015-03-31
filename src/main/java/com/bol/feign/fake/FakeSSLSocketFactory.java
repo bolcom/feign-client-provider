@@ -28,7 +28,9 @@ public class FakeSSLSocketFactory extends SSLSocketFactory {
             SSLContext sslcontext = SSLContext.getInstance("TLS");
             sslcontext.init(null, new TrustManager[]{new FakeTrustManager()}, null);
             factory = sslcontext.getSocketFactory();
-        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+        } catch (NoSuchAlgorithmException e) {
+            throw new IllegalStateException("Unable to construct FakeSSLSocketFactory", e);
+        } catch (KeyManagementException e) {
             throw new IllegalStateException("Unable to construct FakeSSLSocketFactory", e);
         }
     }

@@ -1,11 +1,14 @@
-import static org.gradle.api.JavaVersion.VERSION_1_7
+import static org.gradle.api.JavaVersion.VERSION_1_6
 
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply from: script('integrationTest')
 
-sourceCompatibility = VERSION_1_7
-targetCompatibility = VERSION_1_7
+
+compileJava {
+    sourceCompatibility = VERSION_1_6
+    targetCompatibility = VERSION_1_6
+}
 
 group = 'com.bol.feign'
 

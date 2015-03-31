@@ -19,7 +19,6 @@ import javax.net.ssl.SSLSocketFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class FeignClientProvider {
     private String username;
@@ -48,12 +47,16 @@ public class FeignClientProvider {
     }
 
     public FeignClientProvider(final String url) {
-        Objects.requireNonNull(url, "url must be provided");
+        if (url == null) {
+            throw new IllegalArgumentException("url must be provided");
+        }
         this.url = url.replaceAll("/\\z", "");
     }
 
     public FeignClientProvider withClient(Client client) {
-        Objects.requireNonNull(client, "client must be provided");
+        if (client == null) {
+            throw new IllegalArgumentException("client must be provided");
+        }
         this.client = client;
         return this;
     }
@@ -88,16 +91,24 @@ public class FeignClientProvider {
     }
 
     public FeignClientProvider withLogger(Logger logger, Logger.Level level) {
-        Objects.requireNonNull(logger, "logger must be provided");
-        Objects.requireNonNull(level, "log level must be provided");
+        if (logger == null) {
+            throw new IllegalArgumentException("logger must be provided");
+        }
+        if (level == null) {
+            throw new IllegalArgumentException("log level must be provided");
+        }
         this.logger = logger;
         this.logLevel = level;
         return this;
     }
 
     public FeignClientProvider authenticated(final String username, final String password) {
-        Objects.requireNonNull(username, "username must be provided");
-        Objects.requireNonNull(password, "password must be provided");
+        if (username == null) {
+            throw new IllegalArgumentException("username must be provided");
+        }
+        if (password == null) {
+            throw new IllegalArgumentException("password level must be provided");
+        }
         this.username = username;
         this.password = password;
         this.requiresAuthentication = true;
