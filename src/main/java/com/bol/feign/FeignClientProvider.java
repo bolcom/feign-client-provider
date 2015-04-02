@@ -10,6 +10,8 @@ import feign.Feign;
 import feign.Logger;
 import feign.RequestInterceptor;
 import feign.auth.BasicAuthRequestInterceptor;
+import feign.codec.Decoder;
+import feign.codec.Encoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.jaxrs.JAXRSModule;
@@ -27,6 +29,8 @@ public class FeignClientProvider {
     private final String url;
 
     private Client client;
+    private Decoder decoder;
+    private Encoder encoder;
     private Logger logger;
     private Logger.Level logLevel = Logger.Level.BASIC;
 
@@ -102,6 +106,16 @@ public class FeignClientProvider {
         return this;
     }
 
+    public FeignClientProvider withEncoder(Encoder encoder) {
+        this.encoder = encoder;
+        return this;
+    }
+
+    public FeignClientProvider withDecoder(Decoder decoder) {
+        this.decoder = decoder;
+        return this;
+    }
+
     public FeignClientProvider authenticated(final String username, final String password) {
         if (username == null) {
             throw new IllegalArgumentException("username must be provided");
@@ -120,9 +134,18 @@ public class FeignClientProvider {
         if (client != null) {
             builder.client(client);
         }
+        Decoder decoder = this.decoder;
+        if (decoder==null) {
+            decoder = new JacksonDecoder();
+        }
+        Encoder encoder = this.encoder;
+        if (encoder == null) {
+            encoder = new JacksonEncoder();
+        }
+
         builder.contract(new JAXRSModule.JAXRSContract())
-                .decoder(new JacksonDecoder())
-                .encoder(new JacksonEncoder())
+                .decoder(decoder)
+                .encoder(encoder)
                 .errorDecoder(new FeignErrorDecoder())
                 .requestInterceptors(getRequestInterceptors());
 
