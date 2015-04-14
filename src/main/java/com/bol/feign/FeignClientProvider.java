@@ -19,7 +19,6 @@ import feign.jaxrs.JAXRSModule;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSocketFactory;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FeignClientProvider {
@@ -33,6 +32,7 @@ public class FeignClientProvider {
     private Encoder encoder;
     private Logger logger;
     private Logger.Level logLevel = Logger.Level.BASIC;
+    private List<RequestInterceptor> requestInterceptors = new ArrayList<RequestInterceptor>();
 
     public static <T> T create(Class<T> target, String url) {
         return new FeignClientProvider(url).createClient(target);
@@ -94,6 +94,11 @@ public class FeignClientProvider {
         return withLogger(logger, logLevel);
     }
 
+    public FeignClientProvider addRequestInterceptor(RequestInterceptor requestInterceptor) {
+        this.requestInterceptors.add(requestInterceptor);
+        return this;
+    }
+
     public FeignClientProvider withLogger(Logger logger, Logger.Level level) {
         if (logger == null) {
             throw new IllegalArgumentException("logger must be provided");
@@ -147,7 +152,7 @@ public class FeignClientProvider {
                 .decoder(decoder)
                 .encoder(encoder)
                 .errorDecoder(new FeignErrorDecoder())
-                .requestInterceptors(getRequestInterceptors());
+                .requestInterceptors(createRequestInterceptors());
 
         if (logger != null) {
             builder.logger(logger)
@@ -156,11 +161,11 @@ public class FeignClientProvider {
         return builder.target(target, url);
     }
 
-    private Iterable<RequestInterceptor> getRequestInterceptors() {
-        final List<RequestInterceptor> base = new ArrayList<RequestInterceptor>(Arrays.asList(new JsonApplicationMediaTypeInterceptor()));
+    private Iterable<RequestInterceptor> createRequestInterceptors() {
+        requestInterceptors.add(new JsonApplicationMediaTypeInterceptor());
         if (requiresAuthentication) {
-            base.add(new BasicAuthRequestInterceptor(username, password));
+            requestInterceptors.add(new BasicAuthRequestInterceptor(username, password));
         }
-        return base;
+        return requestInterceptors;
     }
 }
