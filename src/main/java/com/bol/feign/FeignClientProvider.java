@@ -32,7 +32,11 @@ public class FeignClientProvider {
     private Encoder encoder;
     private Logger logger;
     private Logger.Level logLevel = Logger.Level.BASIC;
-    private List<RequestInterceptor> requestInterceptors = new ArrayList<RequestInterceptor>();
+    private static List<RequestInterceptor> requestInterceptors = new ArrayList<RequestInterceptor>();
+
+    static {
+        requestInterceptors.add(new JsonApplicationMediaTypeInterceptor());
+    }
 
     public static <T> T create(Class<T> target, String url) {
         return new FeignClientProvider(url).createClient(target);
@@ -162,7 +166,6 @@ public class FeignClientProvider {
     }
 
     private Iterable<RequestInterceptor> createRequestInterceptors() {
-        requestInterceptors.add(new JsonApplicationMediaTypeInterceptor());
         if (requiresAuthentication) {
             requestInterceptors.add(new BasicAuthRequestInterceptor(username, password));
         }
