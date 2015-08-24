@@ -1,10 +1,7 @@
-package com.bol.feign.internal;
+package com.bol.feign;
 
-import com.bol.feign.FeignHttpClientException;
-import com.bol.feign.FeignHttpServerException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
-
 import static feign.FeignException.errorStatus;
 
 public class FeignErrorDecoder implements ErrorDecoder {

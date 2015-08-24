@@ -1,7 +1,9 @@
 package com.bol.feign.internal
 
+import com.bol.feign.FeignErrorDecoder;
 import com.bol.feign.FeignHttpClientException
 import com.bol.feign.FeignHttpServerException
+
 import feign.FeignException
 import feign.Response
 import spock.lang.Specification
