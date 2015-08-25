@@ -9,12 +9,17 @@ import feign.jaxrs.JAXRSModule;
 
 public class JacksonCallback implements BuilderCallback {
     @Override
-    public void configure(Builder builder) {
+    public final void configure(Builder builder) {
         //@formatter:off
         builder.contract(new JAXRSModule.JAXRSContract())
         .decoder(new JacksonDecoder())
         .encoder(new JacksonEncoder())
         .requestInterceptor(RequestInterceptorCreator.json());
+        postConfigure(builder);;
         //@formatter:on
+    }
+
+    public void postConfigure(Builder builder) {
+        // Nothing to see here, can be overridden
     }
 }
