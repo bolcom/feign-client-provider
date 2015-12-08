@@ -1,7 +1,9 @@
-# feign-client-provider
 Client provider for Feign APIs
 
 Provides a general way to bootstrap Feign API's using a builder pattern:
+# Examples
+
+## DockerRegistryApi with custom errordecoder
 
 The first example is about our DockerRegistryApi, it's an easy construct with only a special DockerErrorDecoder
 ```
@@ -46,9 +48,7 @@ public class DockerErrorDecoder implements ErrorDecoder {
 }
 ```
 
-
-
-
+## ConsulApi with various customizations
 In this example the ConsulApi interface is bootstrapped using a JacksonCallback which by default sets the JAXRSContract, the JacksonDecoder and the JacksonEncoder. It also adds a JSON RequestInterceptor. 
 
 For Consul you have to add some exceptions (for example we want to use the PascalCaseStrategy and we want to add a token to the query params on each request), so that is added within the body of the postConfigure block of the JacksonCallback - ensuring the contract isn't broken.
