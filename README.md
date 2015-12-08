@@ -3,7 +3,7 @@ Client provider for Feign APIs
 
 Provides a general way to bootstrap Feign API's using a builder pattern:
 
-In this example the ConsulApi interface is bootstrapped using a JacksonCallback. 
+In this example the ConsulApi interface is bootstrapped using a JacksonCallback which by default sets the JAXRSContract, the JacksonDecoder and the JacksonEncoder. It also adds a JSON RequestInterceptor. 
 
 ```
  ConsulApi consulApi = new ClientProvider("http://" + hostname + ":" + port, new JacksonCallback() {
