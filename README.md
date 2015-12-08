@@ -5,12 +5,12 @@ Provides a general way to bootstrap Feign API's using a builder pattern:
 
 The first example is about our DockerRegistryApi, it's an easy construct with only a special DockerErrorDecoder
 ```
-        return new ClientProvider(url, new JacksonCallback() {
-            @Override
-            public void postConfigure(Builder builder) {
-                builder.errorDecoder(new DockerErrorDecoder());
-            }
-        }).create(DockerRegistryApi.class);
+return new ClientProvider(url, new JacksonCallback() {
+    @Override
+    public void postConfigure(Builder builder) {
+        builder.errorDecoder(new DockerErrorDecoder());
+    }
+}).create(DockerRegistryApi.class);
 ```
 
 DockerRegistryApi.java
